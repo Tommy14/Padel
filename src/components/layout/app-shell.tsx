@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { LogOut } from "lucide-react";
+import { existsSync } from "node:fs";
+import { join } from "node:path";
 
 import { APP_NAME } from "@/lib/constants";
 import { signOutAction } from "@/server/auth-actions";
@@ -18,19 +20,24 @@ type AppShellProps = {
 };
 
 export function AppShell({ title, subtitle, navItems, children }: AppShellProps) {
+  const videoPath = join(process.cwd(), "public", "videos", "padel-playing.mp4");
+  const hasBackgroundVideo = existsSync(videoPath);
+
   return (
     <div className="relative min-h-screen overflow-hidden bg-muted/40">
       <div aria-hidden className="pointer-events-none absolute inset-0 bg-background">
-        <video
-          className="h-full w-full object-cover opacity-30"
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="metadata"
-        >
-          <source src="/videos/padel-playing.mp4" type="video/mp4" />
-        </video>
+        {hasBackgroundVideo ? (
+          <video
+            className="h-full w-full object-cover opacity-30"
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="metadata"
+          >
+            <source src="/videos/padel-playing.mp4" type="video/mp4" />
+          </video>
+        ) : null}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_hsl(var(--primary)/0.2),_transparent_58%)]" />
         <div className="absolute inset-0 bg-[linear-gradient(180deg,_hsl(var(--background)/0.82),_hsl(var(--background)/0.94))]" />
       </div>
