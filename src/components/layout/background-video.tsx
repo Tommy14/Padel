@@ -47,7 +47,10 @@ export function BackgroundVideo({ src }: BackgroundVideoProps) {
       <video ref={videoRef} className="h-full w-full object-cover opacity-55" autoPlay loop playsInline preload="metadata">
         <source src={src} type="video/mp4" />
       </video>
-      <div className="absolute right-4 top-24 z-20 md:bottom-4 md:top-auto">
+      <div
+        className="absolute right-4 z-20"
+        style={{ top: "calc(100dvh - 4.5rem)" }}
+      >
         <Button
           type="button"
           variant="secondary"
