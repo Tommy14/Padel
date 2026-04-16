@@ -1,29 +1,29 @@
 import Link from "next/link";
+import { CalendarDays, CircleDollarSign, Users } from "lucide-react";
 
 import { getCurrentProfile } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 
 export default async function Home() {
   const profile = await getCurrentProfile();
 
   return (
-    <div className="container flex min-h-screen items-center py-16">
-      <div className="grid w-full gap-8 lg:grid-cols-[1.1fr_0.9fr]">
-        <div className="space-y-6">
-          <p className="text-sm font-medium uppercase tracking-[0.3em] text-primary">Padel Planner</p>
-          <div className="space-y-4">
-            <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
-              Organise padel sessions, credit balances, and player notifications in one place.
-            </h1>
-            <p className="max-w-2xl text-lg text-muted-foreground">
-              Built for admins to schedule sessions, split court costs, deduct credits, and share WhatsApp and calendar details with players.
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-3">
+    <div className="relative overflow-hidden">
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-primary/10 via-background to-background" />
+      <div className="container py-16 md:py-20">
+        <div className="mx-auto max-w-3xl space-y-6 text-center">
+          <p className="text-sm font-semibold uppercase tracking-[0.35em] text-primary">Padel Planner</p>
+          <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl md:text-6xl">
+            Plan sessions faster and keep every player updated.
+          </h1>
+          <p className="text-lg text-muted-foreground">
+            A professional platform for padel groups to manage bookings, track credit balances, and keep schedules clear for both admins and players.
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
             {profile ? (
               <Button asChild size="lg">
-                <Link href={profile.role === "admin" ? "/admin" : "/dashboard"}>Go to dashboard</Link>
+                <Link href={profile.role === "admin" ? "/admin" : "/dashboard"}>Open dashboard</Link>
               </Button>
             ) : (
               <>
@@ -31,24 +31,43 @@ export default async function Home() {
                   <Link href="/login">Log in</Link>
                 </Button>
                 <Button asChild size="lg" variant="outline">
-                  <Link href="/signup">Create an account</Link>
+                  <Link href="/signup">Create account</Link>
                 </Button>
               </>
             )}
           </div>
         </div>
-        <Card>
-          <CardHeader>
-            <CardTitle>What’s included</CardTitle>
-            <CardDescription>Everything needed for admin and player flows.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3 text-sm text-muted-foreground">
-            <p>Admin dashboard with players, courts, sessions, and booking tools.</p>
-            <p>Player dashboard with upcoming and past sessions plus live credit balance.</p>
-            <p>Session confirmation with WhatsApp deep links and `.ics` calendar download.</p>
-          </CardContent>
-        </Card>
+
+        <div className="mt-12 grid gap-4 md:grid-cols-3">
+          <InfoCard
+            icon={<CalendarDays className="h-5 w-5 text-primary" />}
+            title="Session scheduling"
+            text="Book courts, assign players, and share session details with accurate dates and times."
+          />
+          <InfoCard
+            icon={<CircleDollarSign className="h-5 w-5 text-primary" />}
+            title="Credit management"
+            text="Track player balances, split costs fairly, and maintain a reliable transaction history."
+          />
+          <InfoCard
+            icon={<Users className="h-5 w-5 text-primary" />}
+            title="Player visibility"
+            text="Players can view upcoming and past sessions while staying aware of their remaining credit."
+          />
+        </div>
       </div>
     </div>
+  );
+}
+
+function InfoCard({ icon, title, text }: { icon: React.ReactNode; title: string; text: string }) {
+  return (
+    <Card className="border-primary/15 bg-background/90">
+      <CardContent className="space-y-3 p-6">
+        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">{icon}</div>
+        <h2 className="text-lg font-semibold">{title}</h2>
+        <p className="text-sm text-muted-foreground">{text}</p>
+      </CardContent>
+    </Card>
   );
 }
