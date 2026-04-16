@@ -28,6 +28,7 @@ export function CourtsManager({ courts }: CourtsManagerProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isAddCourtOpen, setIsAddCourtOpen] = useState(false);
 
   async function handleCreateCourt(formData: FormData) {
     setLoading(true);
@@ -51,6 +52,7 @@ export function CourtsManager({ courts }: CourtsManagerProps) {
       return;
     }
 
+    setIsAddCourtOpen(false);
     router.refresh();
   }
 
@@ -61,7 +63,7 @@ export function CourtsManager({ courts }: CourtsManagerProps) {
           <CardTitle>Courts</CardTitle>
           <CardDescription>Manage court venues and hourly pricing.</CardDescription>
         </div>
-        <Dialog>
+        <Dialog onOpenChange={setIsAddCourtOpen} open={isAddCourtOpen}>
           <DialogTrigger asChild>
             <Button>Add court</Button>
           </DialogTrigger>

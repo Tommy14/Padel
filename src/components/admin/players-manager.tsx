@@ -28,6 +28,9 @@ export function PlayersManager({ players }: PlayersManagerProps) {
   const router = useRouter();
   const [busyKey, setBusyKey] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [editPlayerOpenId, setEditPlayerOpenId] = useState<string | null>(null);
+  const [addCreditOpenId, setAddCreditOpenId] = useState<string | null>(null);
+  const [editBalanceOpenId, setEditBalanceOpenId] = useState<string | null>(null);
 
   async function addCredit(playerId: string, formData: FormData) {
     setBusyKey(`credit-${playerId}`);
@@ -51,6 +54,7 @@ export function PlayersManager({ players }: PlayersManagerProps) {
       return;
     }
 
+    setAddCreditOpenId(null);
     router.refresh();
   }
 
@@ -75,6 +79,33 @@ export function PlayersManager({ players }: PlayersManagerProps) {
       return;
     }
 
+    setEditPlayerOpenId(null);
+    router.refresh();
+  }
+
+  async function editBalance(playerId: string, formData: FormData) {
+    setBusyKey(`balance-${playerId}`);
+    setError(null);
+
+    const response = await fetch("/api/admin/players/balance", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        playerId,
+        newBalance: Number(formData.get("newBalance")),
+        description: String(formData.get("description") || "Admin balance adjustment"),
+      }),
+    });
+
+    const payload = await response.json();
+    setBusyKey(null);
+
+    if (!response.ok) {
+      setError(payload.error ?? "Failed to update balance.");
+      return;
+    }
+
+    setEditBalanceOpenId(null);
     router.refresh();
   }
 
@@ -115,7 +146,10 @@ export function PlayersManager({ players }: PlayersManagerProps) {
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
-                      <Dialog>
+                      <Dialog
+                        onOpenChange={(open) => setEditPlayerOpenId(open ? player.id : null)}
+                        open={editPlayerOpenId === player.id}
+                      >
                         <DialogTrigger asChild>
                           <Button size="sm" variant="outline">
                             Edit
@@ -155,7 +189,10 @@ export function PlayersManager({ players }: PlayersManagerProps) {
                         </DialogContent>
                       </Dialog>
 
-                      <Dialog>
+                      <Dialog
+                        onOpenChange={(open) => setAddCreditOpenId(open ? player.id : null)}
+                        open={addCreditOpenId === player.id}
+                      >
                         <DialogTrigger asChild>
                           <Button size="sm">Add credit</Button>
                         </DialogTrigger>
@@ -186,6 +223,57 @@ export function PlayersManager({ players }: PlayersManagerProps) {
                             <DialogFooter>
                               <Button disabled={busyKey === `credit-${player.id}`} type="submit">
                                 {busyKey === `credit-${player.id}` ? "Adding..." : "Add credit"}
+                              </Button>
+                            </DialogFooter>
+                          </form>
+                        </DialogContent>
+                      </Dialog>
+
+                      <Dialog
+                        onOpenChange={(open) => setEditBalanceOpenId(open ? player.id : null)}
+                        open={editBalanceOpenId === player.id}
+                      >
+                        <DialogTrigger asChild>
+                          <Button size="sm" variant="secondary">
+                            Edit balance
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                          <DialogHeader>
+                            <DialogTitle>Edit credit balance</DialogTitle>
+                            <DialogDescription>
+                              Set an exact balance for {player.name}. The adjustment will be logged in transactions.
+                            </DialogDescription>
+                          </DialogHeader>
+                          <form
+                            className="space-y-4"
+                            action={async (formData) => {
+                              await editBalance(player.id, formData);
+                            }}
+                          >
+                            <div className="space-y-2">
+                              <Label htmlFor={`new-balance-${player.id}`}>New balance</Label>
+                              <Input
+                                defaultValue={String(Number(player.credit_balance))}
+                                id={`new-balance-${player.id}`}
+                                name="newBalance"
+                                required
+                                step="0.01"
+                                type="number"
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <Label htmlFor={`balance-desc-${player.id}`}>Description</Label>
+                              <Input
+                                defaultValue="Admin balance adjustment"
+                                id={`balance-desc-${player.id}`}
+                                name="description"
+                                required
+                              />
+                            </div>
+                            <DialogFooter>
+                              <Button disabled={busyKey === `balance-${player.id}`} type="submit">
+                                {busyKey === `balance-${player.id}` ? "Saving..." : "Update balance"}
                               </Button>
                             </DialogFooter>
                           </form>

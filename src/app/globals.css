@@ -38,3 +38,37 @@
     @apply bg-background text-foreground font-sans antialiased;
   }
 }
+
+@layer utilities {
+  @keyframes float-soft {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-6px);
+    }
+  }
+
+  @keyframes glow-sweep {
+    0% {
+      transform: translateX(-120%);
+      opacity: 0;
+    }
+    40% {
+      opacity: 0.45;
+    }
+    100% {
+      transform: translateX(220%);
+      opacity: 0;
+    }
+  }
+
+  .animate-float-soft {
+    animation: float-soft 4s ease-in-out infinite;
+  }
+
+  .animate-glow-sweep {
+    animation: glow-sweep 2.6s ease-in-out infinite;
+  }
+}
