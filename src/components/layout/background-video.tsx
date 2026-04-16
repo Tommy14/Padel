@@ -43,14 +43,11 @@ export function BackgroundVideo({ src }: BackgroundVideoProps) {
   };
 
   return (
-    <>
+    <div className="relative h-screen w-full">
       <video ref={videoRef} className="h-full w-full object-cover opacity-55" autoPlay loop playsInline preload="metadata">
         <source src={src} type="video/mp4" />
       </video>
-      <div
-        className="absolute right-4 z-20"
-        style={{ top: "calc(100dvh - 4.5rem)" }}
-      >
+      <div className="absolute bottom-4 right-4 z-20">
         <Button
           type="button"
           variant="secondary"
@@ -62,7 +59,7 @@ export function BackgroundVideo({ src }: BackgroundVideoProps) {
           {muted ? "Unmute" : "Mute"}
         </Button>
       </div>
-    </>
+    </div>
   );
 }
 
