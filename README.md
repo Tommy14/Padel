@@ -12,7 +12,7 @@ Padel Planner is a full-stack admin tool for organising padel sessions, tracking
 
 ## Features
 
-- Email/password and SMS OTP signup/login with Supabase Auth
+- Email/password signup and login with Supabase Auth
 - Auto-created `profiles` rows for new signups
 - Single admin user determined by `ADMIN_EMAIL`
 - Admin dashboard with player, session, and credit overview
@@ -68,16 +68,6 @@ npm run dev
 - A database trigger creates the matching `profiles` row using signup metadata
 - Players are redirected to `/dashboard`
 - The user whose email matches `ADMIN_EMAIL` is redirected to `/admin`
-- SMS OTP auth is available in both `/login` and `/signup` (requires Supabase phone auth enabled)
-
-## Supabase auth configuration
-
-Enable the following in Supabase `Authentication -> Providers`:
-
-- Email provider (for email/password auth)
-- Phone provider (for SMS OTP auth)
-
-For phone auth, configure your preferred SMS provider credentials in Supabase before testing OTP flows.
 
 ## Database notes
 
