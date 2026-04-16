@@ -25,7 +25,7 @@ export function AppShell({ title, subtitle, navItems, children }: AppShellProps)
   const hasBackgroundVideo = existsSync(videoPath);
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-muted/40">
+    <div className="relative min-h-screen overflow-x-hidden bg-muted/40">
       <div aria-hidden className="pointer-events-none absolute inset-0 bg-background">
         {hasBackgroundVideo ? (
           <BackgroundVideo src="/videos/padel-playing.mp4" />

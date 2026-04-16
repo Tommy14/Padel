@@ -47,8 +47,14 @@ export function BackgroundVideo({ src }: BackgroundVideoProps) {
       <video ref={videoRef} className="h-full w-full object-cover opacity-55" autoPlay loop playsInline preload="metadata">
         <source src={src} type="video/mp4" />
       </video>
-      <div className="absolute bottom-4 right-4 z-20">
-        <Button type="button" variant="secondary" size="sm" className="pointer-events-auto gap-2 bg-background/70 backdrop-blur" onClick={handleToggleMute}>
+      <div className="absolute bottom-4 right-4 z-20 md:fixed md:bottom-5 md:right-5 md:z-40">
+        <Button
+          type="button"
+          variant="secondary"
+          size="sm"
+          className="pointer-events-auto gap-2 bg-background/75 shadow-lg backdrop-blur"
+          onClick={handleToggleMute}
+        >
           {muted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
           {muted ? "Unmute" : "Mute"}
         </Button>

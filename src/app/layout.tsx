@@ -23,12 +23,9 @@ const themeScript = `
 (() => {
   const storageKey = "theme";
   const persistedTheme = window.localStorage.getItem(storageKey);
-  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
   const theme = persistedTheme === "light" || persistedTheme === "dark"
     ? persistedTheme
-    : prefersDark
-      ? "dark"
-      : "light";
+    : "dark";
   document.documentElement.classList.toggle("dark", theme === "dark");
 })();
 `;
@@ -39,7 +36,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className="dark" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
