@@ -20,13 +20,19 @@ type AppShellProps = {
 export function AppShell({ title, subtitle, navItems, children }: AppShellProps) {
   return (
     <div className="relative min-h-screen overflow-hidden bg-muted/40">
-      <div aria-hidden className="pointer-events-none absolute inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_hsl(var(--primary)/0.16),_transparent_62%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,_hsl(var(--background)/0.78),_hsl(var(--background)/0.92))]" />
-        <div className="padel-court-grid absolute left-1/2 top-20 h-[580px] w-[min(94vw,1200px)] -translate-x-1/2 rounded-[2rem] border border-primary/20 bg-primary/[0.04]" />
-        <div className="padel-player-run absolute left-[8%] top-[48%] h-3 w-3 rounded-full bg-primary/50 blur-[1px]" />
-        <div className="padel-player-run-alt absolute right-[8%] top-[60%] h-3 w-3 rounded-full bg-primary/40 blur-[1px]" />
-        <div className="padel-ball-bounce absolute left-[18%] top-[26%] h-2.5 w-2.5 rounded-full bg-warning/80 shadow-[0_0_14px_hsl(var(--warning)/0.7)]" />
+      <div aria-hidden className="pointer-events-none absolute inset-0 bg-background">
+        <video
+          className="h-full w-full object-cover opacity-30"
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="metadata"
+        >
+          <source src="/videos/padel-playing.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_hsl(var(--primary)/0.2),_transparent_58%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,_hsl(var(--background)/0.82),_hsl(var(--background)/0.94))]" />
       </div>
       <header className="relative z-10 border-b bg-background/90 backdrop-blur">
         <div className="container flex flex-col gap-4 py-4 md:flex-row md:items-center md:justify-between">
