@@ -6,6 +6,7 @@ import { join } from "node:path";
 import { APP_NAME } from "@/lib/constants";
 import { signOutAction } from "@/server/auth-actions";
 import { Button } from "@/components/ui/button";
+import { BackgroundVideo } from "@/components/layout/background-video";
 
 type NavItem = {
   href: string;
@@ -27,19 +28,10 @@ export function AppShell({ title, subtitle, navItems, children }: AppShellProps)
     <div className="relative min-h-screen overflow-hidden bg-muted/40">
       <div aria-hidden className="pointer-events-none absolute inset-0 bg-background">
         {hasBackgroundVideo ? (
-          <video
-            className="h-full w-full object-cover opacity-30"
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="metadata"
-          >
-            <source src="/videos/padel-playing.mp4" type="video/mp4" />
-          </video>
+          <BackgroundVideo src="/videos/padel-playing.mp4" />
         ) : null}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_hsl(var(--primary)/0.2),_transparent_58%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,_hsl(var(--background)/0.82),_hsl(var(--background)/0.94))]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_hsl(var(--primary)/0.14),_transparent_58%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,_hsl(var(--background)/0.58),_hsl(var(--background)/0.8))]" />
       </div>
       <header className="relative z-10 border-b bg-background/90 backdrop-blur">
         <div className="container flex flex-col gap-4 py-4 md:flex-row md:items-center md:justify-between">
