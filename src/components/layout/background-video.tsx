@@ -1,9 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { Volume2, VolumeX } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
+import { useEffect, useRef } from "react";
 
 type BackgroundVideoProps = {
   src: string;
@@ -11,7 +8,6 @@ type BackgroundVideoProps = {
 
 export function BackgroundVideo({ src }: BackgroundVideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [muted, setMuted] = useState(true);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -19,46 +15,17 @@ export function BackgroundVideo({ src }: BackgroundVideoProps) {
       return;
     }
 
-    video.muted = muted;
+    video.muted = true;
     void video.play().catch(() => {
-      // Browsers can block autoplay; user interaction on the button will retry.
+      // Browsers can block autoplay; keep static background in that case.
     });
-  }, [muted]);
-
-  const handleToggleMute = async () => {
-    const video = videoRef.current;
-    if (!video) {
-      return;
-    }
-
-    const nextMuted = !muted;
-    video.muted = nextMuted;
-    setMuted(nextMuted);
-
-    try {
-      await video.play();
-    } catch {
-      // No-op: if playback is blocked, the browser handles it.
-    }
-  };
+  }, []);
 
   return (
     <div className="relative h-screen w-full">
-      <video ref={videoRef} className="h-full w-full object-cover opacity-55" autoPlay loop playsInline preload="metadata">
+      <video ref={videoRef} className="h-full w-full object-cover opacity-55" autoPlay loop muted playsInline preload="metadata">
         <source src={src} type="video/mp4" />
       </video>
-      <div className="absolute bottom-4 right-4 z-20">
-        <Button
-          type="button"
-          variant="secondary"
-          size="sm"
-          className="pointer-events-auto gap-2 bg-background/75 shadow-lg backdrop-blur"
-          onClick={handleToggleMute}
-        >
-          {muted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
-          {muted ? "Unmute" : "Mute"}
-        </Button>
-      </div>
     </div>
   );
 }
