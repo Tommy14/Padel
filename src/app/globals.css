@@ -177,6 +177,21 @@
     animation: glow-sweep 2.6s ease-in-out infinite;
   }
 
+  .glass-surface {
+    background: linear-gradient(160deg, hsl(var(--background) / 0.52), hsl(var(--background) / 0.3));
+    border: 1px solid hsl(var(--border) / 0.45);
+    box-shadow: 0 14px 34px hsl(222 60% 6% / 0.22);
+    backdrop-filter: blur(16px) saturate(135%);
+    -webkit-backdrop-filter: blur(16px) saturate(135%);
+  }
+
+  .glass-soft {
+    background: linear-gradient(160deg, hsl(var(--background) / 0.58), hsl(var(--background) / 0.4));
+    border: 1px solid hsl(var(--border) / 0.4);
+    backdrop-filter: blur(12px) saturate(125%);
+    -webkit-backdrop-filter: blur(12px) saturate(125%);
+  }
+
   .padel-court-grid {
     background-image: linear-gradient(to right, hsl(var(--primary) / 0.1) 1px, transparent 1px),
       linear-gradient(to bottom, hsl(var(--primary) / 0.1) 1px, transparent 1px),

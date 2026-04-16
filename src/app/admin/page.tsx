@@ -10,7 +10,7 @@ export default async function AdminDashboardPage() {
 
   return (
     <div className="space-y-5 md:space-y-6">
-      <Card className="relative overflow-hidden border-primary/20 bg-gradient-to-br from-primary/15 via-background to-background">
+      <Card className="relative overflow-hidden border-primary/25 bg-gradient-to-br from-primary/20 via-background/55 to-background/35">
         <div className="pointer-events-none absolute -left-8 top-1/2 h-24 w-24 -translate-y-1/2 rounded-full bg-primary/10 blur-2xl" />
         <div className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-primary/15 blur-3xl" />
         <div className="pointer-events-none absolute bottom-0 left-0 h-[2px] w-full overflow-hidden">
@@ -34,7 +34,7 @@ export default async function AdminDashboardPage() {
         </CardContent>
       </Card>
 
-      <Card className="border-primary/10">
+      <Card className="border-primary/20">
         <CardHeader>
           <CardTitle className="text-xl">Quick actions</CardTitle>
           <CardDescription>Jump into high-impact admin tasks in one tap.</CardDescription>
@@ -83,7 +83,7 @@ function ActionTile({
 }) {
   return (
     <Link
-      className="group rounded-xl border bg-background/80 p-4 transition hover:border-primary/40 hover:bg-primary/5"
+      className="glass-soft group rounded-xl p-4 transition hover:border-primary/45 hover:bg-primary/10"
       href={href}
     >
       <div className="flex items-start justify-between gap-3">
@@ -103,7 +103,7 @@ function ActionTile({
 
 function QuickPulse({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-lg border bg-background/70 px-3 py-2">
+    <div className="glass-soft rounded-lg px-3 py-2">
       <p className="text-xs uppercase tracking-wider text-muted-foreground">{label}</p>
       <p className="mt-1 text-base font-semibold">{value}</p>
     </div>

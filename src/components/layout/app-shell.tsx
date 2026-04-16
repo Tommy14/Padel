@@ -33,7 +33,7 @@ export function AppShell({ title, subtitle, navItems, children }: AppShellProps)
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_hsl(var(--primary)/0.14),_transparent_58%)]" />
         <div className="absolute inset-0 bg-[linear-gradient(180deg,_hsl(var(--background)/0.58),_hsl(var(--background)/0.8))]" />
       </div>
-      <header className="relative z-10 border-b bg-background/90 backdrop-blur">
+      <header className="glass-surface relative z-10 border-b">
         <div className="container flex flex-col gap-4 py-4 md:flex-row md:items-center md:justify-between">
           <div>
             <Link href="/" className="text-lg font-semibold text-primary">
@@ -57,7 +57,7 @@ export function AppShell({ title, subtitle, navItems, children }: AppShellProps)
         </div>
       </header>
       <main className="relative z-10 container py-8">
-        <div className="mb-8">
+        <div className="glass-surface mb-8 rounded-2xl px-5 py-4 sm:px-6">
           <h1 className="text-3xl font-semibold tracking-tight">{title}</h1>
         </div>
         {children}

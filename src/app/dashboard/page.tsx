@@ -13,7 +13,7 @@ export default async function PlayerDashboardPage() {
 
   return (
     <div className="space-y-5 md:space-y-6">
-      <Card className="relative overflow-hidden border-primary/20 bg-gradient-to-br from-primary/10 via-background to-background">
+      <Card className="relative overflow-hidden border-primary/25 bg-gradient-to-br from-primary/18 via-background/55 to-background/35">
         <div className="pointer-events-none absolute -right-10 -top-10 h-36 w-36 rounded-full bg-primary/15 blur-2xl" />
         <div className="pointer-events-none absolute bottom-0 left-0 h-[2px] w-full overflow-hidden">
           <div className="h-full w-24 bg-primary/60 animate-glow-sweep" />
@@ -51,16 +51,16 @@ export default async function PlayerDashboardPage() {
 
 function SessionSection({ title, items, emptyText }: { title: string; items: PlayerSessionEntry[]; emptyText: string }) {
   return (
-    <Card className="border-primary/10">
+    <Card className="border-primary/20">
       <CardHeader className="pb-3">
         <CardTitle className="text-xl">{title}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
         {items.length === 0 ? (
-          <div className="rounded-xl border border-dashed bg-muted/40 p-5 text-sm text-muted-foreground">{emptyText}</div>
+          <div className="glass-soft rounded-xl border-dashed p-5 text-sm text-muted-foreground">{emptyText}</div>
         ) : null}
         {items.map((entry) => (
-          <div key={entry.id} className="rounded-xl border bg-background p-4 transition hover:border-primary/40 hover:shadow-sm">
+          <div key={entry.id} className="glass-soft rounded-xl p-4 transition hover:border-primary/40 hover:shadow-sm">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div className="space-y-1">
                 <p className="flex items-center gap-2 font-semibold">
@@ -86,7 +86,7 @@ function SessionSection({ title, items, emptyText }: { title: string; items: Pla
 
 function StatChip({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
   return (
-    <div className="rounded-xl border bg-background/80 px-3 py-2">
+    <div className="glass-soft rounded-xl px-3 py-2">
       <div className="flex items-center gap-2 text-xs uppercase tracking-wider text-muted-foreground">
         {icon}
         {label}
