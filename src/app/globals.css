@@ -66,6 +66,85 @@
 }
 
 @layer utilities {
+  @keyframes padel-court-pan {
+    0% {
+      transform: translateX(-50%) perspective(780px) rotateX(60deg) scale(1);
+      opacity: 0.5;
+    }
+    50% {
+      transform: translateX(-50%) perspective(780px) rotateX(60deg) scale(1.03);
+      opacity: 0.7;
+    }
+    100% {
+      transform: translateX(-50%) perspective(780px) rotateX(60deg) scale(1);
+      opacity: 0.5;
+    }
+  }
+
+  @keyframes padel-player-run {
+    0% {
+      transform: translate3d(0, 0, 0);
+      opacity: 0.35;
+    }
+    25% {
+      transform: translate3d(36vw, -12vh, 0);
+      opacity: 0.65;
+    }
+    50% {
+      transform: translate3d(58vw, 4vh, 0);
+      opacity: 0.3;
+    }
+    75% {
+      transform: translate3d(18vw, 16vh, 0);
+      opacity: 0.55;
+    }
+    100% {
+      transform: translate3d(0, 0, 0);
+      opacity: 0.35;
+    }
+  }
+
+  @keyframes padel-player-run-alt {
+    0% {
+      transform: translate3d(0, 0, 0);
+      opacity: 0.3;
+    }
+    25% {
+      transform: translate3d(-24vw, 14vh, 0);
+      opacity: 0.6;
+    }
+    50% {
+      transform: translate3d(-52vw, -6vh, 0);
+      opacity: 0.25;
+    }
+    75% {
+      transform: translate3d(-18vw, -18vh, 0);
+      opacity: 0.55;
+    }
+    100% {
+      transform: translate3d(0, 0, 0);
+      opacity: 0.3;
+    }
+  }
+
+  @keyframes padel-ball-bounce {
+    0% {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    25% {
+      transform: translate3d(32vw, 18vh, 0) scale(0.75);
+    }
+    50% {
+      transform: translate3d(58vw, -4vh, 0) scale(1);
+    }
+    75% {
+      transform: translate3d(84vw, 18vh, 0) scale(0.8);
+    }
+    100% {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+  }
+
   @keyframes float-soft {
     0%,
     100% {
@@ -96,5 +175,27 @@
 
   .animate-glow-sweep {
     animation: glow-sweep 2.6s ease-in-out infinite;
+  }
+
+  .padel-court-grid {
+    background-image: linear-gradient(to right, hsl(var(--primary) / 0.1) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(var(--primary) / 0.1) 1px, transparent 1px),
+      linear-gradient(transparent 49.5%, hsl(var(--primary) / 0.2) 50%, transparent 50.5%);
+    background-size: 110px 100%, 100% 70px, 100% 100%;
+    transform-origin: top center;
+    animation: padel-court-pan 9s ease-in-out infinite;
+    filter: drop-shadow(0 0 24px hsl(var(--primary) / 0.16));
+  }
+
+  .padel-player-run {
+    animation: padel-player-run 11s linear infinite;
+  }
+
+  .padel-player-run-alt {
+    animation: padel-player-run-alt 13s linear infinite;
+  }
+
+  .padel-ball-bounce {
+    animation: padel-ball-bounce 5.4s cubic-bezier(0.47, 0.01, 0.38, 0.96) infinite;
   }
 }

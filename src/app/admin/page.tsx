@@ -34,12 +34,6 @@ export default async function AdminDashboardPage() {
         </CardContent>
       </Card>
 
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        <StatCard icon={Users} label="Total players" value={String(stats.playerCount)} />
-        <StatCard icon={CalendarDays} label="Upcoming this week" value={String(stats.upcomingThisWeek)} />
-        <StatCard icon={CircleDollarSign} label="Total credits held" value={formatCurrency(stats.totalCreditsHeld)} />
-      </div>
-
       <Card className="border-primary/10">
         <CardHeader>
           <CardTitle className="text-xl">Quick actions</CardTitle>
@@ -73,28 +67,6 @@ export default async function AdminDashboardPage() {
         </CardContent>
       </Card>
     </div>
-  );
-}
-
-function StatCard({
-  icon: Icon,
-  label,
-  value,
-}: {
-  icon: typeof Users;
-  label: string;
-  value: string;
-}) {
-  return (
-    <Card className="border-primary/10 bg-background/85 backdrop-blur-sm transition hover:border-primary/40 hover:shadow-sm">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium text-muted-foreground">{label}</CardTitle>
-        <Icon className="h-4 w-4 text-primary" />
-      </CardHeader>
-      <CardContent>
-        <div className="text-3xl font-semibold tracking-tight">{value}</div>
-      </CardContent>
-    </Card>
   );
 }
 
