@@ -1,4 +1,5 @@
 import { CalendarDays, Clock3, CircleDollarSign, Sparkles, Users } from "lucide-react";
+import Link from "next/link";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { CreditBadge } from "@/components/ui/credit-badge";
@@ -43,13 +44,28 @@ export default async function PlayerDashboardPage() {
         </CardContent>
       </Card>
 
-      <SessionSection emptyText="No upcoming sessions yet. Once your admin books one, it will appear here." title="Upcoming sessions" items={data.upcoming} />
+      <SessionSection
+        emptyText="No upcoming sessions yet. Once your admin books one, it will appear here."
+        title="Upcoming sessions"
+        items={data.upcoming}
+        itemHref="/dashboard/sessions"
+      />
       <SessionSection emptyText="No past sessions recorded yet." title="Past sessions" items={data.past} />
     </div>
   );
 }
 
-function SessionSection({ title, items, emptyText }: { title: string; items: PlayerSessionEntry[]; emptyText: string }) {
+function SessionSection({
+  title,
+  items,
+  emptyText,
+  itemHref,
+}: {
+  title: string;
+  items: PlayerSessionEntry[];
+  emptyText: string;
+  itemHref?: string;
+}) {
   return (
     <Card className="border-primary/20">
       <CardHeader className="pb-3">
@@ -59,26 +75,40 @@ function SessionSection({ title, items, emptyText }: { title: string; items: Pla
         {items.length === 0 ? (
           <div className="glass-soft rounded-xl border-dashed p-5 text-sm text-muted-foreground">{emptyText}</div>
         ) : null}
-        {items.map((entry) => (
-          <div key={entry.id} className="glass-soft rounded-xl p-4 transition hover:border-primary/40 hover:shadow-sm">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <div className="space-y-1">
-                <p className="flex items-center gap-2 font-semibold">
-                  <Users className="h-4 w-4 text-primary" />
-                  {entry.session?.court?.name ?? "Court unavailable"}
-                </p>
-                {entry.session ? (
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    {formatSessionDate(entry.session.date)} · {formatTimeRange(entry.session.start_time, entry.session.end_time)}
+        {items.map((entry) => {
+          const card = (
+            <div
+              className={`glass-soft rounded-xl p-4 transition hover:border-primary/40 hover:shadow-sm ${itemHref ? "cursor-pointer hover:bg-primary/5" : ""}`}
+            >
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div className="space-y-1">
+                  <p className="flex items-center gap-2 font-semibold">
+                    <Users className="h-4 w-4 text-primary" />
+                    {entry.session?.court?.name ?? "Court unavailable"}
                   </p>
-                ) : null}
-              </div>
-              <div className="rounded-full bg-primary/10 px-3 py-1 text-sm font-medium text-primary w-fit">
-                Fee {formatCurrency(Number(entry.fee))}
+                  {entry.session ? (
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      {formatSessionDate(entry.session.date)} · {formatTimeRange(entry.session.start_time, entry.session.end_time)}
+                    </p>
+                  ) : null}
+                </div>
+                <div className="rounded-full bg-primary/10 px-3 py-1 text-sm font-medium text-primary w-fit">
+                  Fee {formatCurrency(Number(entry.fee))}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+
+          if (!itemHref) {
+            return <div key={entry.id}>{card}</div>;
+          }
+
+          return (
+            <Link key={entry.id} href={itemHref} aria-label="Open My sessions page">
+              {card}
+            </Link>
+          );
+        })}
       </CardContent>
     </Card>
   );
