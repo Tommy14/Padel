@@ -23,6 +23,28 @@ type SessionConfirmationActionsProps = {
 
 export function SessionConfirmationActions(props: SessionConfirmationActionsProps) {
   const playerNames = props.players.map((player) => player.name);
+  const session = {
+    date: props.date,
+    startTime: props.startTime,
+    endTime: props.endTime,
+    courtName: props.courtName,
+    courtLocation: props.courtLocation,
+    playerNames,
+  };
+  const playerLinks = props.players.map((player) => ({
+    player,
+    link: buildWhatsappLink(
+      {
+        name: player.name,
+        phone: player.phone,
+        fee: player.fee,
+        creditBalance: player.creditBalance,
+      },
+      session,
+    ),
+  }));
+  const sendableLinks = playerLinks.flatMap((entry) => (entry.link ? [entry.link] : []));
+  const playersMissingPhone = playerLinks.filter((entry) => !entry.link).map((entry) => entry.player.name);
 
   function handleDownloadIcs() {
     const ics = buildSessionIcs({
@@ -43,31 +65,39 @@ export function SessionConfirmationActions(props: SessionConfirmationActionsProp
     URL.revokeObjectURL(url);
   }
 
+  async function handleSendWhatsappAndCalendar() {
+    handleDownloadIcs();
+
+    for (const [index, link] of sendableLinks.entries()) {
+      if (index > 0) {
+        await new Promise((resolve) => window.setTimeout(resolve, 450));
+      }
+
+      window.open(link, "_blank", "noopener,noreferrer");
+    }
+  }
+
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap gap-3">
         <Button onClick={handleDownloadIcs} type="button" variant="outline">
           Send calendar invite
         </Button>
+        <Button disabled={sendableLinks.length === 0} onClick={handleSendWhatsappAndCalendar} type="button">
+          Send WhatsApp + Calendar
+        </Button>
       </div>
+      <p className="text-sm text-muted-foreground">
+        WhatsApp links open in new tabs. The invite downloads first, then chats open one by one. Attach the file manually
+        in WhatsApp if needed.
+      </p>
+      {playersMissingPhone.length > 0 ? (
+        <p className="text-sm text-muted-foreground">
+          No WhatsApp number for: {playersMissingPhone.join(", ")}.
+        </p>
+      ) : null}
       <div className="flex flex-wrap gap-3">
-        {props.players.map((player) => {
-          const link = buildWhatsappLink(
-            {
-              name: player.name,
-              phone: player.phone,
-              fee: player.fee,
-              creditBalance: player.creditBalance,
-            },
-            {
-              date: props.date,
-              startTime: props.startTime,
-              endTime: props.endTime,
-              courtName: props.courtName,
-              courtLocation: props.courtLocation,
-              playerNames,
-            },
-          );
+        {playerLinks.map(({ player, link }) => {
 
           return (
             <Button asChild disabled={!link} key={player.id} type="button">
