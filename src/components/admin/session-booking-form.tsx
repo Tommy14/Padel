@@ -18,6 +18,8 @@ type SessionBookingFormProps = {
   players: Profile[];
 };
 
+const hourOptions = Array.from({ length: 24 }, (_, hour) => `${String(hour).padStart(2, "0")}:00`);
+
 export function SessionBookingForm({ courts, players }: SessionBookingFormProps) {
   const router = useRouter();
   const [courtId, setCourtId] = useState(courts[0]?.id ?? "");
@@ -114,11 +116,33 @@ export function SessionBookingForm({ courts, players }: SessionBookingFormProps)
             </div>
             <div className="space-y-2">
               <Label htmlFor="session-start-time">Start time</Label>
-              <Input id="session-start-time" type="time" value={startTime} onChange={(event) => setStartTime(event.target.value)} />
+              <Select onValueChange={setStartTime} value={startTime}>
+                <SelectTrigger id="session-start-time">
+                  <SelectValue placeholder="Select hour" />
+                </SelectTrigger>
+                <SelectContent>
+                  {hourOptions.map((time) => (
+                    <SelectItem key={`start-${time}`} value={time}>
+                      {time}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
             <div className="space-y-2">
               <Label htmlFor="session-end-time">End time</Label>
-              <Input id="session-end-time" type="time" value={endTime} onChange={(event) => setEndTime(event.target.value)} />
+              <Select onValueChange={setEndTime} value={endTime}>
+                <SelectTrigger id="session-end-time">
+                  <SelectValue placeholder="Select hour" />
+                </SelectTrigger>
+                <SelectContent>
+                  {hourOptions.map((time) => (
+                    <SelectItem key={`end-${time}`} value={time}>
+                      {time}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </div>
 
@@ -183,7 +207,7 @@ export function SessionBookingForm({ courts, players }: SessionBookingFormProps)
             </div>
             <div className="flex items-center justify-between">
               <span className="text-muted-foreground">Duration</span>
-              <span>{durationHours.toFixed(2)} hours</span>
+              <span>{durationHours.toFixed(0)} hours</span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-muted-foreground">Total cost</span>
