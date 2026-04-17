@@ -1,7 +1,9 @@
 "use client";
 
+import { useMemo, useState } from "react";
+
 import { buildSessionIcs } from "@/lib/ics";
-import { buildWhatsappLink } from "@/lib/whatsapp";
+import { buildWhatsappLink, buildWhatsappMessage } from "@/lib/whatsapp";
 import { Button } from "@/components/ui/button";
 
 type PlayerRow = {
@@ -23,7 +25,64 @@ type SessionConfirmationActionsProps = {
 
 export function SessionConfirmationActions(props: SessionConfirmationActionsProps) {
   const playerNames = props.players.map((player) => player.name);
-  const playerLinks = props.players.map((player) => ({
+  const [sentMap, setSentMap] = useState<Record<string, boolean>>({});
+
+  const playerLinks = useMemo(
+    () =>
+      props.players.map((player) => {
+        const sessionForPlayer = {
+          date: props.date,
+          startTime: props.startTime,
+          endTime: props.endTime,
+          courtName: props.courtName,
+          courtLocation: props.courtLocation,
+          otherPlayerNames: playerNames.filter((name) => name !== player.name),
+        };
+
+        return {
+          player,
+          message: buildWhatsappMessage(
+            {
+              name: player.name,
+              phone: player.phone,
+              fee: player.fee,
+              creditBalance: player.creditBalance,
+            },
+            sessionForPlayer,
+          ),
+          link: buildWhatsappLink(
+            {
+              name: player.name,
+              phone: player.phone,
+              fee: player.fee,
+              creditBalance: player.creditBalance,
+            },
+            sessionForPlayer,
+          ),
+        };
+      }),
+    [props.courtLocation, props.courtName, props.date, props.endTime, props.players, props.startTime, playerNames],
+  );
+  const sentCount = Object.values(sentMap).filter(Boolean).length;
+  const readyToSendCount = playerLinks.filter(({ link }) => Boolean(link)).length;
+  const allSendableMarkedSent = readyToSendCount > 0 && sentCount >= readyToSendCount;
+
+  function handleToggleSent(playerId: string) {
+    setSentMap((current) => ({
+      ...current,
+      [playerId]: !current[playerId],
+    }));
+  }
+
+  async function handleCopyAllMessages() {
+    const allMessages = playerLinks
+      .map(({ player, message }) => `--- ${player.name} ---\n${message}`)
+      .join("\n\n");
+
+    await navigator.clipboard.writeText(allMessages);
+  }
+
+  const playerLinksLegacy = props.players.map((player) => ({
     player,
     link: buildWhatsappLink(
       {
@@ -42,8 +101,8 @@ export function SessionConfirmationActions(props: SessionConfirmationActionsProp
       },
     ),
   }));
-  const sendableLinks = playerLinks.flatMap((entry) => (entry.link ? [entry.link] : []));
-  const playersMissingPhone = playerLinks.filter((entry) => !entry.link).map((entry) => entry.player.name);
+  const sendableLinks = playerLinksLegacy.flatMap((entry) => (entry.link ? [entry.link] : []));
+  const playersMissingPhone = playerLinksLegacy.filter((entry) => !entry.link).map((entry) => entry.player.name);
 
   function handleDownloadIcs() {
     const ics = buildSessionIcs({
@@ -82,6 +141,9 @@ export function SessionConfirmationActions(props: SessionConfirmationActionsProp
         <Button onClick={handleDownloadIcs} type="button" variant="outline">
           Send calendar invite
         </Button>
+        <Button onClick={handleCopyAllMessages} type="button" variant="outline">
+          Copy all WhatsApp messages
+        </Button>
         <Button disabled={sendableLinks.length === 0} onClick={handleSendWhatsappAndCalendar} type="button">
           Send WhatsApp + Calendar
         </Button>
@@ -95,9 +157,12 @@ export function SessionConfirmationActions(props: SessionConfirmationActionsProp
           No WhatsApp number for: {playersMissingPhone.join(", ")}.
         </p>
       ) : null}
+      <p className="text-sm text-muted-foreground">
+        Sent checklist: {sentCount}/{readyToSendCount} players marked sent.
+        {allSendableMarkedSent ? " All sendable players are marked as sent." : ""}
+      </p>
       <div className="flex flex-wrap gap-3">
         {playerLinks.map(({ player, link }) => {
-
           return (
             <Button asChild disabled={!link} key={player.id} type="button">
               <a href={link ?? "#"} rel="noreferrer" target="_blank">
@@ -106,6 +171,38 @@ export function SessionConfirmationActions(props: SessionConfirmationActionsProp
             </Button>
           );
         })}
+      </div>
+      <div className="space-y-3">
+        {playerLinks.map(({ player, link, message }) => (
+          <div className="space-y-2 rounded-md border p-3" key={player.id}>
+            <div className="flex items-center justify-between gap-3">
+              <p className="font-medium">{player.name}</p>
+              <label className="flex items-center gap-2 text-sm text-muted-foreground">
+                <input
+                  checked={Boolean(sentMap[player.id])}
+                  onChange={() => handleToggleSent(player.id)}
+                  type="checkbox"
+                />
+                Mark sent
+              </label>
+            </div>
+            <p className="whitespace-pre-wrap rounded-md bg-muted p-3 text-sm">{message}</p>
+            <div className="flex flex-wrap gap-2">
+              <Button
+                onClick={() => navigator.clipboard.writeText(message)}
+                type="button"
+                variant="outline"
+              >
+                Copy {player.name} message
+              </Button>
+              <Button asChild disabled={!link} type="button">
+                <a href={link ?? "#"} rel="noreferrer" target="_blank">
+                  Open chat
+                </a>
+              </Button>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
