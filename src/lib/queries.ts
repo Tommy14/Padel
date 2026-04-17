@@ -15,6 +15,7 @@ export type SessionWithRelations = {
   start_time: string;
   end_time: string;
   total_cost: number;
+  notes: string | null;
   court: Court | null;
   session_players: SessionPlayerWithProfile[];
 };
