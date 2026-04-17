@@ -6,7 +6,7 @@ import type { Court, Profile } from "@/lib/types";
 export type SessionPlayerWithProfile = {
   id: string;
   fee: number;
-  player: Profile | null;
+  player: Pick<Profile, "id" | "name"> | null;
 };
 
 export type SessionWithRelations = {
@@ -139,7 +139,7 @@ export async function getPlayerDashboardData(playerId: string) {
           court:courts(*),
           session_players(
             *,
-            player:profiles(*)
+            player:profiles(id, name)
           )
         )
       `,
