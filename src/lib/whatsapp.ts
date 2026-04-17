@@ -48,6 +48,7 @@ export function buildWhatsappLink(player: WhatsappPlayer, session: WhatsappSessi
   }
 
   const message = buildWhatsappMessage(player, session);
+  const phone = player.phone.replace(/^\+/, "");
 
-  return `https://wa.me/${player.phone.replace(/^\+/, "")}?text=${encodeURIComponent(message)}`;
+  return `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(message)}`;
 }
