@@ -18,15 +18,24 @@ type WhatsappSession = {
 
 export function buildWhatsappMessage(player: WhatsappPlayer, session: WhatsappSession) {
   const others = session.otherPlayerNames.length > 0 ? session.otherPlayerNames.join(", ") : "No other players listed";
+  const EMOJI_TENNIS = String.fromCodePoint(0x1f3be);
+  const EMOJI_CALENDAR = String.fromCodePoint(0x1f4c5);
+  const EMOJI_CLOCK = String.fromCodePoint(0x23f0);
+  const EMOJI_STADIUM = String.fromCodePoint(0x1f3df);
+  const EMOJI_PEOPLE = String.fromCodePoint(0x1f465);
+  const EMOJI_CARD = String.fromCodePoint(0x1f4b3);
+  const EMOJI_MONEY_BAG = String.fromCodePoint(0x1f4b0);
 
-  return `Hi ${player.name}! 🎾 You have a padel session booked.
-📅 Date: ${session.date}
-⏰ Time: ${session.startTime} - ${session.endTime}
-🏟️ Venue: ${session.courtName}, ${session.courtLocation}
-👥 Others: ${others}
-💳 Your fee: ${APP_CURRENCY} ${player.fee.toFixed(2)} (deducted from your credit)
-💰 Remaining credit: ${player.creditBalance.toFixed(2)}
-See you on the court!`;
+  return [
+    `Hi ${player.name}! ${EMOJI_TENNIS} You have a padel session booked.`,
+    `${EMOJI_CALENDAR} Date: ${session.date}`,
+    `${EMOJI_CLOCK} Time: ${session.startTime} - ${session.endTime}`,
+    `${EMOJI_STADIUM} Venue: ${session.courtName}, ${session.courtLocation}`,
+    `${EMOJI_PEOPLE} Others: ${others}`,
+    `${EMOJI_CARD} Your fee: ${APP_CURRENCY} ${player.fee.toFixed(2)} (deducted from your credit)`,
+    `${EMOJI_MONEY_BAG} Remaining credit: ${player.creditBalance.toFixed(2)}`,
+    "See you on the court!",
+  ].join("\n");
 }
 
 export function buildWhatsappLink(player: WhatsappPlayer, session: WhatsappSession) {
