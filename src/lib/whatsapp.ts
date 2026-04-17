@@ -17,7 +17,11 @@ type WhatsappSession = {
 };
 
 export function buildWhatsappMessage(player: WhatsappPlayer, session: WhatsappSession) {
-  const others = session.otherPlayerNames.length > 0 ? session.otherPlayerNames.join(", ") : "No other players listed";
+  const firstName = player.name.trim().split(/\s+/)[0] ?? player.name;
+  const otherFirstNames = session.otherPlayerNames
+    .map((name) => name.trim().split(/\s+/)[0] ?? name)
+    .filter(Boolean);
+  const others = otherFirstNames.length > 0 ? otherFirstNames.join(", ") : "No other players listed";
   const EMOJI_TENNIS = String.fromCodePoint(0x1f3be);
   const EMOJI_CALENDAR = String.fromCodePoint(0x1f4c5);
   const EMOJI_CLOCK = String.fromCodePoint(0x23f0);
@@ -27,7 +31,7 @@ export function buildWhatsappMessage(player: WhatsappPlayer, session: WhatsappSe
   const EMOJI_MONEY_BAG = String.fromCodePoint(0x1f4b0);
 
   return [
-    `Hi ${player.name}! ${EMOJI_TENNIS} You have a padel session booked.`,
+    `Hi ${firstName}! ${EMOJI_TENNIS} You have a padel session booked.`,
     `${EMOJI_CALENDAR} Date: ${session.date}`,
     `${EMOJI_CLOCK} Time: ${session.startTime} - ${session.endTime}`,
     `${EMOJI_STADIUM} Venue: ${session.courtName}, ${session.courtLocation}`,
