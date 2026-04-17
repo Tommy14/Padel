@@ -13,15 +13,17 @@ type WhatsappSession = {
   endTime: string;
   courtName: string;
   courtLocation: string;
-  playerNames: string[];
+  otherPlayerNames: string[];
 };
 
 export function buildWhatsappMessage(player: WhatsappPlayer, session: WhatsappSession) {
+  const others = session.otherPlayerNames.length > 0 ? session.otherPlayerNames.join(", ") : "No other players listed";
+
   return `Hi ${player.name}! 🎾 You have a padel session booked.
 📅 Date: ${session.date}
 ⏰ Time: ${session.startTime} - ${session.endTime}
-🏟️ Court: ${session.courtName}, ${session.courtLocation}
-👥 Players: ${session.playerNames.join(", ")}
+🏟️ Venue: ${session.courtName}, ${session.courtLocation}
+👥 Others: ${others}
 💳 Your fee: ${APP_CURRENCY} ${player.fee.toFixed(2)} (deducted from your credit)
 💰 Remaining credit: ${player.creditBalance.toFixed(2)}
 See you on the court!`;

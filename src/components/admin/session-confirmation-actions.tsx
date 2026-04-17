@@ -23,14 +23,6 @@ type SessionConfirmationActionsProps = {
 
 export function SessionConfirmationActions(props: SessionConfirmationActionsProps) {
   const playerNames = props.players.map((player) => player.name);
-  const session = {
-    date: props.date,
-    startTime: props.startTime,
-    endTime: props.endTime,
-    courtName: props.courtName,
-    courtLocation: props.courtLocation,
-    playerNames,
-  };
   const playerLinks = props.players.map((player) => ({
     player,
     link: buildWhatsappLink(
@@ -40,7 +32,14 @@ export function SessionConfirmationActions(props: SessionConfirmationActionsProp
         fee: player.fee,
         creditBalance: player.creditBalance,
       },
-      session,
+      {
+        date: props.date,
+        startTime: props.startTime,
+        endTime: props.endTime,
+        courtName: props.courtName,
+        courtLocation: props.courtLocation,
+        otherPlayerNames: playerNames.filter((name) => name !== player.name),
+      },
     ),
   }));
   const sendableLinks = playerLinks.flatMap((entry) => (entry.link ? [entry.link] : []));
