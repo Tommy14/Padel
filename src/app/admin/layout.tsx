@@ -6,6 +6,7 @@ const navItems = [
   { href: "/admin/players", label: "Players" },
   { href: "/admin/courts", label: "Courts" },
   { href: "/admin/sessions", label: "Sessions" },
+  { href: "/admin/availability", label: "Availability" },
   { href: "/admin/sessions/new", label: "Book session" },
 ];
 

@@ -64,6 +64,12 @@ export default async function AdminDashboardPage() {
             icon={<CircleDollarSign className="h-5 w-5 text-primary" />}
             label="View sessions"
           />
+          <ActionTile
+            description="View live court openings from padelclub.lk."
+            href="/admin/availability"
+            icon={<CalendarDays className="h-5 w-5 text-primary" />}
+            label="Check availability"
+          />
         </CardContent>
       </Card>
     </div>
